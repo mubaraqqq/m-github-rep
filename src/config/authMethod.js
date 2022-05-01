@@ -4,4 +4,4 @@
 
 import { GithubAuthProvider } from 'firebase/auth';
 
-export const provider = new GithubAuthProvider();
+export const githubProvider = new GithubAuthProvider();

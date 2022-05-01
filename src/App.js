@@ -1,22 +1,88 @@
+import { useState, useEffect } from 'react'
 import './App.css';
-import png from './GitHub-Mark/GitHub-Mark/PNG/GitHub-Mark-64px.png'
+import png from './GitHub-Mark/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png'
 import { app, analytics } from './config/firebase-config';
-import { provider } from './config/authMethod';
-import githubAuth from './service/auth'
-import { Card, Box, CardContent } from '@mui/material'
+import { githubProvider } from './config/authMethod';
+import { githubSignOutAuth } from './service/auth';
+import { getAuth, signInWithPopup, signOut, GithubAuthProvider } from "firebase/auth";
+import { Card, Box, CardContent } from '@mui/material';
+import axios from 'axios';
 
 function App() {
-  const handleClick = (provide) => {
-    const res = githubAuth(provide);
-    console.log(res);
+  const [repos, setRepos] = useState([]);
+  const [tokens, setTokens] = useState('');
+
+
+  const signIn = (provider) => {
+    const auth = getAuth();
+    signInWithPopup(auth, provider)
+    .then((result) => {
+        // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+        const credential = GithubAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        setTokens(token);
+
+        // The signed-in user info.
+        const user = result.user;
+        // console.log(user)
+        // ...
+    }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The AuthCredential type that was used.
+        const credential = GithubAuthProvider.credentialFromError(error);
+        // ...
+    });
   }
+
+  const signOut = () => {
+    githubSignOutAuth();
+  };
+
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (user !== null) {
+  // The user object has basic properties such as display name, email, etc.
+  const displayName = user.displayName;
+  const email = user.email;
+  const photoURL = user.photoURL;
+  const emailVerified = user.emailVerified;
+  console.log(displayName, email, photoURL, emailVerified);
+
+  // The user's ID, unique to the Firebase project. Do NOT use
+  // this value to authenticate with your backend server, if
+  // you have one. Use User.getToken() instead.
+  const uid = user.uid;
+  }
+
+  useEffect(() => {
+    axios
+      .get('https://api.github.com/user/repos', {
+        headers: {
+          Authorization: `token ${tokens}` 
+        }
+      })
+      .then((res) => {
+        setRepos(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [user]);
+
+  console.log(repos);
 
   return (
     <Box className="App" sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
       <Card>
         <CardContent sx={{display: 'flex', flexDirection: 'column'}}>
           <img src={png} height='auto' width='100%' alt="" />
-          <button className='home-button' onClick={() => handleClick(provider)}>Login with Github</button>
+          <button className='home-button' onClick={() => signIn(githubProvider)}>Login with Github</button>
+          <button className='home-button' onClick={signOut}>Logout</button>
         </CardContent>
       </Card>
     </Box>
