@@ -45,7 +45,30 @@ const Profile = ({ repos, user }) => {
                     <input type="text" placeholder='Find a repository...' value={search} onChange={handleSearch} />
                 </Stack>
                 <Divider />
-                
+                <Box>
+                    {
+                        repos.slice(1, 22).map(repo => (
+                            <Box key={repo.id}>
+                                <Box sx={{display: 'flex', justifyContent: 'space-between', padding: '2em 0'}}>
+                                    <Box>
+                                        <Stack direction='column' spacing={2}>
+                                            <Typography>{repo.name}</Typography>
+                                            <Stack direction='row' spacing={3}>
+                                                <Typography variant='caption'>{repo.language}</Typography>
+                                                <Typography variant='caption'>{repo.stargazers_count}</Typography>
+                                                <Typography variant='caption'>Updated {repo.updated_at}</Typography>
+                                            </Stack>
+                                        </Stack>
+                                    </Box>
+                                    <Box>
+                                        <button>Star</button>
+                                    </Box>
+                                </Box>
+                                <Divider />
+                            </Box>
+                        ))
+                    }
+                </Box>
             </Grid>
         </Grid>
     </div>
