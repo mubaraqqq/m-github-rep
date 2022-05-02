@@ -5,13 +5,15 @@ import { app, analytics } from './config/firebase-config';
 import { githubProvider } from './config/authMethod';
 import { githubSignOutAuth } from './service/auth';
 import { getAuth, signInWithPopup, signOut, GithubAuthProvider } from "firebase/auth";
+import { useGetReposQuery } from './services/reposApi';
 import { Card, Box, CardContent } from '@mui/material';
 import axios from 'axios';
 
 function App() {
-  const [repos, setRepos] = useState([]);
   const [tokens, setTokens] = useState('');
-
+  const { data, isFetching } = useGetReposQuery(tokens);
+  let repos;
+  // if (data) repos = data;
 
   const signIn = (provider) => {
     const auth = getAuth();
@@ -38,6 +40,9 @@ function App() {
     });
   }
 
+  
+  console.log(data);
+
   const signOut = () => {
     githubSignOutAuth();
   };
@@ -59,33 +64,26 @@ function App() {
   const uid = user.uid;
   }
 
-  useEffect(() => {
-    axios
-      .get('https://api.github.com/user/repos', {
-        headers: {
-          Authorization: `token ${tokens}` 
-        }
-      })
-      .then((res) => {
-        setRepos(res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [user]);
-
-  console.log(repos);
+  if(isFetching) return <h1>Fetching...</h1>
 
   return (
-    <Box className="App" sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-      <Card>
-        <CardContent sx={{display: 'flex', flexDirection: 'column'}}>
-          <img src={png} height='auto' width='100%' alt="" />
-          <button className='home-button' onClick={() => signIn(githubProvider)}>Login with Github</button>
-          <button className='home-button' onClick={signOut}>Logout</button>
-        </CardContent>
-      </Card>
-    </Box>
+    <div>
+      {
+        data?.length > 0
+        ? <Box>Repos</Box>
+        : (
+          <Box className="App" sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Card>
+              <CardContent sx={{display: 'flex', flexDirection: 'column'}}>
+                <img src={png} height='auto' width='100%' alt="" />
+                <button className='home-button' onClick={() => signIn(githubProvider)}>Login with Github</button>
+                <button className='home-button' onClick={signOut}>Logout</button>
+              </CardContent>
+            </Card>
+          </Box>
+        )
+      }
+    </div>
   );
 }
 
