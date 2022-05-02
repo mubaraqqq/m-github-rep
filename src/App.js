@@ -6,7 +6,7 @@ import { githubProvider } from './config/authMethod';
 import { githubSignOutAuth } from './service/auth';
 import { getAuth, signInWithPopup, signOut, GithubAuthProvider } from "firebase/auth";
 import { useGetReposQuery, useGetUserQuery } from './services/reposApi';
-import { Card, Box, CardContent } from '@mui/material';
+import { Card, Box, CardContent, CircularProgress } from '@mui/material';
 import Profile from './components/Profile';
 
 function App() {
@@ -63,7 +63,7 @@ function App() {
   const uid = user.uid;
   }
 
-  if(isFetching || isLoading) return <h1>Fetching...</h1>
+  if(isFetching || isLoading) return <Box sx={{width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}> <CircularProgress /></Box>
 
   return (
     <div>
