@@ -3,12 +3,20 @@ import { Divider, Box, Grid, Avatar, Typography, Chip, TextField, MenuItem, Stac
 import moment from 'moment';
 
 const Repo = ({ repo }) => {
+    const firstLetterUpperCase = (str) => {
+        let arr = str.split('');
+        arr[0] = arr[0].toUpperCase();
+        return arr.join('');
+    }
   return (
     <>
         <Box sx={{display: 'flex', justifyContent: 'space-between', padding: '2em 0'}}>
             <Box>
                 <Stack direction='column' spacing={2}>
-                    <Typography sx={{color: 'blue', fontWeight: '700'}}>{repo.name}</Typography>
+                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                        <Typography sx={{color: 'blue', fontWeight: '700', marginRight: '1em'}}>{repo.name}</Typography>
+                        <Chip label={firstLetterUpperCase(repo.visibility)} variant='outlined' sx={{fontSize: '10px', height: '17px', fontWeight: 'bold'}} />
+                    </Box>
                     <Stack direction='row' spacing={3}>
                         <Typography variant='caption'>{repo.language}</Typography>
                         <Typography variant='caption'>{repo.stargazers_count}</Typography>
