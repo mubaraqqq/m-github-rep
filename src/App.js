@@ -5,15 +5,15 @@ import { app, analytics } from './config/firebase-config';
 import { githubProvider } from './config/authMethod';
 import { githubSignOutAuth } from './service/auth';
 import { getAuth, signInWithPopup, signOut, GithubAuthProvider } from "firebase/auth";
-import { useGetReposQuery } from './services/reposApi';
+import { useGetReposQuery, useGetUserQuery } from './services/reposApi';
 import { Card, Box, CardContent } from '@mui/material';
-import axios from 'axios';
+import Profile from './components/Profile';
 
 function App() {
   const [tokens, setTokens] = useState('');
   const { data, isFetching } = useGetReposQuery(tokens);
-  let repos;
-  // if (data) repos = data;
+  const { data: users, isLoading } = useGetUserQuery(tokens);
+  const repos = data;
 
   const signIn = (provider) => {
     const auth = getAuth();
@@ -41,7 +41,7 @@ function App() {
   }
 
   
-  console.log(data);
+  console.log(data, users);
 
   const signOut = () => {
     githubSignOutAuth();
@@ -56,7 +56,6 @@ function App() {
   const email = user.email;
   const photoURL = user.photoURL;
   const emailVerified = user.emailVerified;
-  console.log(displayName, email, photoURL, emailVerified);
 
   // The user's ID, unique to the Firebase project. Do NOT use
   // this value to authenticate with your backend server, if
@@ -64,13 +63,13 @@ function App() {
   const uid = user.uid;
   }
 
-  if(isFetching) return <h1>Fetching...</h1>
+  if(isFetching || isLoading) return <h1>Fetching...</h1>
 
   return (
     <div>
       {
-        data?.length > 0
-        ? <Box>Repos</Box>
+        repos?.length > 0
+        ? <Profile repos={repos} user={users} />
         : (
           <Box className="App" sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Card>

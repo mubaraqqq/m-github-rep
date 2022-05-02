@@ -15,8 +15,16 @@ export const reposApi = createApi({
                     'Authorization': `token ${token}`
                 }
             }),
+        }),
+        getUser: builder.query({
+            query: (token) => ({
+                url: `/user`,
+                headers: { 
+                    'Authorization': `token ${token}`
+                }
+            }),
         })
     })
 })
 
-export const { useGetReposQuery } = reposApi;
+export const { useGetReposQuery, useGetUserQuery } = reposApi;
