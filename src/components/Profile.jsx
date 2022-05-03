@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Divider, Box, Grid, Avatar, Typography, Chip, TextField, MenuItem, Stack } from '@mui/material';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 import Repo from './Repo';
 
 const Profile = ({ repos, user }) => {
@@ -18,7 +19,7 @@ const Profile = ({ repos, user }) => {
             <Typography className='head-text' sx={{borderBottom: '2px solid orange', paddingBottom: '3em', fontWeight: 'bold'}}>Repositories <Chip label={repos.length} sx={{height: '20px'}}/></Typography>
             <Typography className='head-text' sx={{fontWeight: 'bold'}}>Projects</Typography>
             <Typography className='head-text' sx={{fontWeight: 'bold'}}>Packages</Typography>
-            <Typography className='head-text' sx={{fontWeight: 'bold'}}>Stars</Typography>
+            <Typography className='head-text' sx={{fontWeight: 'bold'}}><StarBorderIcon sx={{position: 'relative', top: '5px'}}/> Stars</Typography>
         </Stack>
         <Grid container spacing={5} sx={{padding: '0 4em'}}>
             <Grid item xs={3}>
