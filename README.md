@@ -7,7 +7,7 @@ This was an assessment given to me upon my application to Bitmama for the positi
 
 ## Requirements
 I was required to build a React app for my GitHub profile repository using the Github REST endpoint similar to this https://res.cloudinary.com/bitmama/image/upload/v1651075023/Screenshot_2022-04-27_at_16.56.31_c2iejq.png.
-A user should be able to login using GitHub OAuth and vuew all their public repositories.
+A user should be able to login using GitHub OAuth and vuew all their public repositories. I did this using the Firebase OAuth for github.
 Basically, I was reuired to incorporate the following into the app:
 - Login with GitHub OAuth
 - Show the first 20 public repositories
