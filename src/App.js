@@ -4,7 +4,7 @@ import png from './GitHub-Mark/GitHub-Mark/PNG/GitHub-Mark-120px-plus.png'
 import { app, analytics } from './config/firebase-config';
 import { githubProvider } from './config/authMethod';
 import { githubSignOutAuth } from './service/auth';
-import { getAuth, signInWithPopup, signOut, GithubAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GithubAuthProvider } from "firebase/auth";
 import { useGetReposQuery, useGetUserQuery } from './services/reposApi';
 import { Card, Box, CardContent, CircularProgress } from '@mui/material';
 import Profile from './components/Profile';
@@ -40,13 +40,6 @@ function App() {
     });
   }
 
-  
-  console.log(data, users);
-
-  const signOut = () => {
-    githubSignOutAuth();
-  };
-
 
   const auth = getAuth();
   const user = auth.currentUser;
@@ -76,7 +69,6 @@ function App() {
               <CardContent sx={{display: 'flex', flexDirection: 'column'}}>
                 <img src={png} height='auto' width='100%' alt="" />
                 <button className='home-button' onClick={() => signIn(githubProvider)}>Login with Github</button>
-                <button className='home-button' onClick={signOut}>Logout</button>
               </CardContent>
             </Card>
           </Box>
